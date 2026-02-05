@@ -1,5 +1,29 @@
 # AptoUI
 
+## Installation
+
+The addons are most easily installed by downloading it via WowUp.
+
+1. On repository page click **Code** and copy the HTTPS URL shown.
+2. In WowUp, select **Get Addons** → **Install from URL**.
+3. Paste the HTTPS URL in and click **Import**, then **Install**.
+
+Verify under **My Addons** that the addon is installed.
+
+### Configuring WowUp
+
+You need to configure WowUp to use a Personal Access Token associated with a Github user account.
+Otherwise you are prone to receiving vague installation errors.
+Please use your own Github user account and token.
+
+[You can generate a Personal Access Token from this link.](https://github.com/settings/tokens/new)
+
+You need to set the scopes. I believe you only need the following:
+
+- **read:packages**
+
+Generate your token and copy it. In WowUp visit **Options** → **Addons** and paste in your Personal Access Token.
+
 ## Background
 
 This was originally intended to be a bit of discovery work to see if I could build a
