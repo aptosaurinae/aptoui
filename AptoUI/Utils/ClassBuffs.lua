@@ -57,7 +57,7 @@ function AptoUI.Utils.HasMissingClassBuff(class)
     local debug = false
     if not noError and debug then
         print("AptoUI.Utils.HasMissingClassBuff: error checking if missing class buffs")
-    end if
+    end
 
     local missingBuffTypes = {}
     for buffCategoryName, buffCategoryBuffNames in pairs(AptoUI.Utils.ClassBuffLookup[class]) do
