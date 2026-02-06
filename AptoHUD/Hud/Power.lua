@@ -147,12 +147,17 @@ local function UpdatePowerTextureUsingCount(iconNumber, unitName, textureItem, r
     if resourceType == "secondary" or resourceType == "dk_runes" then
         alpha = 0.25
     end
-    if type(powerCount) == "number" then
-        if powerCount >= iconNumber then
-            colour = AptoUI.Utils.GetPowerColour(powerType)
-            alpha = 1
+    -- if we get an error trying to get the power value (such as for a brief moment as combat starts)
+    -- we want to just skip updating for a moment.
+    local noError, err = pcall(function()
+        if type(powerCount) == "number" then
+            if powerCount >= iconNumber then
+                colour = AptoUI.Utils.GetPowerColour(powerType)
+                alpha = 1
+            end
         end
-    end
+    end)
+
     textureItem:Show()
     textureItem:SetVertexColor(colour.r, colour.g, colour.b, alpha)
 end
