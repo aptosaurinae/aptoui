@@ -29,7 +29,7 @@ end
 
 function AptoUI.Reminders.CreateBuffReminders()
     local class, _ = AptoUI.Utils.GetClassAndSpec()
-    local classBuffs = AptoUI.Utils.ClassBuffLookup[class]
+    local classBuffs = AptoUI.Utils.ClassBuffLookup[class] or {}
 
     local buffReminderFrame = AptoUI.Utils.CreateHUDFrame(class)
 
