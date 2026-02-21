@@ -1,19 +1,23 @@
 -- Get secret health values
-local function GetHealthValues(unitName)
-    local perc1 = UnitHealthPercent(unitName, false, CurveConstants.ZeroToOne)
-    local perc1r = UnitHealthPercent(unitName, false, CurveConstants.Reverse)
-    return perc1, perc1r
+local function GetHealthColor(unitName)
+    local curveHealth = C_CurveUtil.CreateColorCurve();
+    curveHealth:SetType(Enum.LuaCurveType.Step);
+    curveHealth:AddPoint(0, CreateColor(1, 0, 0, 1)); -- red
+    curveHealth:AddPoint(0.3, CreateColor(1, 0.6, 0, 1));  -- orange
+    curveHealth:AddPoint(0.6, CreateColor(1, 1, 0, 1));  -- yellow
+    curveHealth:AddPoint(0.9, CreateColor(0, 1, 0, 1));  -- green
+    return UnitHealthPercent(unitName, false, curveHealth)
 end
 
 -- Updates the mask based on health values
 local function UpdateHealthTextureUsingPercent(unitName, textureItem)
-    local perc1, perc1r = GetHealthValues(unitName)
-    if not perc1 then
+    local color = GetHealthColor(unitName)
+    if not color then
         textureItem:Hide()
         return
     end
     textureItem:Show()
-    textureItem:SetVertexColor(perc1r, perc1, 0, 1)
+    textureItem:SetVertexColor(color:GetRGB())
 end
 
 function AptoUI.HUD.CreateHexSegmentPlayerHP(parent)
