@@ -6,6 +6,7 @@ local function GetHealthColor(unitName)
     curveHealth:AddPoint(0.3, CreateColor(1, 0.6, 0, 0.8));  -- orange
     curveHealth:AddPoint(0.6, CreateColor(1, 1, 0, 0.6));  -- yellow
     curveHealth:AddPoint(0.9, CreateColor(0, 1, 0, 0.4));  -- green
+    curveHealth:AddPoint(0.99, CreateColor(0, 1, 0, 0.2));  -- green
     return UnitHealthPercent(unitName, false, curveHealth)
 end
 
