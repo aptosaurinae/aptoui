@@ -1,5 +1,8 @@
 local combatEvent = "PLAYER_REGEN_DISABLED"
 local outOfCombatEvent = "PLAYER_REGEN_ENABLED"
+local reloadEvent = "PLAYER_ENTERING_WORLD"
+local mStartEvent = "CHALLENGE_MODE_START"
+local mEndEvent = "CHALLENGE_MODE_COMPLETED"
 local buffCheckEvents = {
     UNIT_AURA = true,
     UPDATE_SHAPESHIFT_FORM = true,
@@ -27,6 +30,19 @@ local function ShowBuffReminder(frame, isMissing)
     end
 end
 
+local function HideReminderFrame(frame)
+    for eventName, _ in pairs(buffCheckEvents) do
+        frame:Hide()
+        frame:UnregisterEvent(eventName)
+    end
+end
+
+local function ShowReminderFrame(frame)
+    for eventName, _ in pairs(buffCheckEvents) do
+        reminderFrame:RegisterEvent(eventName)
+    end
+end
+
 function AptoUI.Reminders.CreateBuffReminders()
     local class, _ = AptoUI.Utils.GetClassAndSpec()
     local classBuffs = AptoUI.Utils.ClassBuffLookup[class] or {}
@@ -41,6 +57,10 @@ function AptoUI.Reminders.CreateBuffReminders()
         reminderFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
         reminderFrame:RegisterEvent(combatEvent)
         reminderFrame:RegisterEvent(outOfCombatEvent)
+        reminderFrame:RegisterEvent(mStartEvent)
+        reminderFrame:RegisterEvent(mEndEvent)
+        reminderFrame:RegisterEvent(reloadEvent)
+
         for eventName, _ in pairs(buffCheckEvents) do
             reminderFrame:RegisterEvent(eventName)
         end
@@ -50,18 +70,27 @@ function AptoUI.Reminders.CreateBuffReminders()
         -- so we might as well just hide the frames in this case
         reminderFrame:SetScript("OnEvent", function(self, event, unit)
             if event == combatEvent then
-                for eventName, _ in pairs(buffCheckEvents) do
-                    reminderFrame:Hide()
-                    reminderFrame:UnregisterEvent(eventName)
-                end
+                HideReminderFrame(reminderFrame)
             elseif event == outOfCombatEvent then
-                for eventName, _ in pairs(buffCheckEvents) do
-                    reminderFrame:RegisterEvent(eventName)
-                end
+                ShowReminderFrame(reminderFrame)
             end
             if AptoUI.Utils.isUpdateEvent(buffCheckEvents, event) or event == outOfCombatEvent then
                 local isMissing = AptoUI.Utils.HasMissingClassBuff(class)[classBuffType] or false
                 ShowBuffReminder(reminderFrame, isMissing)
+            end
+            if event == mStartEvent then
+                HideReminderFrame(reminderFrame)
+            end
+            if event == mEndEvent then
+                ShowReminderFrame(reminderFrame)
+            end
+            if event == reloadEvent then
+                local active = C_ChallengeMode.IsChallengeModeActive()
+                if active then
+                    HideReminderFrame(reminderFrame)
+                else
+                    ShowReminderFrame(reminderFrame)
+                end
             end
         end)
         reminderIndex = reminderIndex + 1
