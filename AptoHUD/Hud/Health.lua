@@ -3,9 +3,9 @@ local function GetHealthColor(unitName)
     local curveHealth = C_CurveUtil.CreateColorCurve();
     curveHealth:SetType(Enum.LuaCurveType.Step);
     curveHealth:AddPoint(0, CreateColor(1, 0, 0, 1)); -- red
-    curveHealth:AddPoint(0.3, CreateColor(1, 0.6, 0, 1));  -- orange
-    curveHealth:AddPoint(0.6, CreateColor(1, 1, 0, 1));  -- yellow
-    curveHealth:AddPoint(0.9, CreateColor(0, 1, 0, 1));  -- green
+    curveHealth:AddPoint(0.3, CreateColor(1, 0.6, 0, 0.8));  -- orange
+    curveHealth:AddPoint(0.6, CreateColor(1, 1, 0, 0.6));  -- yellow
+    curveHealth:AddPoint(0.9, CreateColor(0, 1, 0, 0.4));  -- green
     return UnitHealthPercent(unitName, false, curveHealth)
 end
 
