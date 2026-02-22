@@ -17,7 +17,7 @@ local function UpdateHealthTextureUsingPercent(unitName, textureItem)
         return
     end
     textureItem:Show()
-    textureItem:SetVertexColor(color:GetRGB())
+    textureItem:SetVertexColor(color:GetRGBA())
 end
 
 function AptoUI.HUD.CreateHexSegmentPlayerHP(parent)
