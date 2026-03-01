@@ -10,15 +10,24 @@ AptoUI.CastBar.Config = {
     scale = 0.5
 }
 
-function CustomiseCastBar()
-    local config = AptoUI.CastBar.Config
-    local bar = PlayerCastingBarFrame
-    if not bar then return end
+local function CustomiseSpark(originalBarHeight, config)
+    local spark = PlayerCastingBarFrame.Spark
+    local barScaleFactor = config.height / originalBarHeight
+    local originalSparkHeight = spark:GetHeight()
+    local sparkHeightNew = originalSparkHeight * barScaleFactor * config.scale
+    print(originalBarHeight, config.height, barScaleFactor, originalSparkHeight, config.scale, sparkHeightNew)
+    spark:SetHeight(sparkHeightNew)
+end
 
+local function CustomiseCastBarSize(bar, barOverlay, config)
     bar:SetWidth(config.width)
     bar:SetHeight(config.height)
     bar:SetAlpha(config.alpha)
     bar:SetScale(config.scale)
+    barOverlay:SetWidth(config.width)
+    barOverlay:SetHeight(config.height)
+    barOverlay:SetAlpha(config.alpha)
+    barOverlay:SetScale(config.scale)
 
     local text = bar.Text or bar.TextLabel or bar.TextString
     if text then
@@ -33,10 +42,15 @@ function CustomiseCastBar()
         end
         text:SetScale(1 / config.scale)
     end
+end
 
+local function CustomiseCarBarBackground(bar, config)
     -- disable background "shadow"
+    -- https://github.com/Gethe/wow-ui-source/blob/5e5a1811b2215107dc59172f00394a4aad07f9bf/Interface/AddOns/Blizzard_UIPanels_Game/Mainline/CastingBarFrame.xml#L205
+    -- line 205: CastingBarFrameBaseTemplate contains the layers a cast bar is made up of
+    -- 2 = background
     for i, region in ipairs({ PlayerCastingBarFrame:GetRegions() }) do
-        if i < 3 then
+        if i == 2 then
             local tex = region.GetTexture and region:GetTexture()
             if tex then
                 region:SetTexture(nil)
@@ -44,6 +58,18 @@ function CustomiseCastBar()
             end
         end
     end
+end
+
+local function CustomiseCastBar()
+    local config = AptoUI.CastBar.Config
+    local bar = PlayerCastingBarFrame
+    local barOverlay = OverlayPlayerCastingBarFrame
+    if not bar then return end
+
+    local originalBarHeight = bar:GetHeight()
+    CustomiseCastBarSize(bar, barOverlay, config)
+    CustomiseCarBarBackground(bar, config)
+    CustomiseSpark(originalBarHeight, config)
 end
 
 local frame = CreateFrame("Frame")
