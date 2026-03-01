@@ -15,7 +15,6 @@ local function CustomiseSpark(originalBarHeight, config)
     local barScaleFactor = config.height / originalBarHeight
     local originalSparkHeight = spark:GetHeight()
     local sparkHeightNew = originalSparkHeight * barScaleFactor * config.scale
-    print(originalBarHeight, config.height, barScaleFactor, originalSparkHeight, config.scale, sparkHeightNew)
     spark:SetHeight(sparkHeightNew)
 end
 
