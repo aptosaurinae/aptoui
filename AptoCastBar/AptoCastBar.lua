@@ -9,13 +9,20 @@ AptoUI.CastBar.Config = {
     textInside = true,
     scale = 0.5
 }
+AptoUI.CastBar.originalBarHeight = nil
+AptoUI.CastBar.newSparkHeight = nil
 
-local function CustomiseSpark(originalBarHeight, config)
-    local spark = PlayerCastingBarFrame.Spark
+local function SparkGetNewHeight(spark, originalBarHeight, config)
     local barScaleFactor = config.height / originalBarHeight
     local originalSparkHeight = spark:GetHeight()
     local sparkHeightNew = originalSparkHeight * barScaleFactor * config.scale
-    spark:SetHeight(sparkHeightNew)
+    return sparkHeightNew
+end
+
+local function CustomiseSpark(originalBarHeight, config)
+    local spark = PlayerCastingBarFrame.Spark
+    AptoUI.CastBar.newSparkHeight = AptoUI.CastBar.newSparkHeight or SparkGetNewHeight(spark, originalBarHeight, config)
+    spark:SetHeight(AptoUI.CastBar.newSparkHeight)
 end
 
 local function CustomiseCastBarSize(bar, barOverlay, config)
@@ -65,10 +72,10 @@ local function CustomiseCastBar()
     local barOverlay = OverlayPlayerCastingBarFrame
     if not bar then return end
 
-    local originalBarHeight = bar:GetHeight()
+    AptoUI.CastBar.originalBarHeight = AptoUI.CastBar.originalBarHeight or bar:GetHeight()
     CustomiseCastBarSize(bar, barOverlay, config)
     CustomiseCarBarBackground(bar, config)
-    CustomiseSpark(originalBarHeight, config)
+    CustomiseSpark(AptoUI.CastBar.originalBarHeight, config)
 end
 
 local frame = CreateFrame("Frame")
