@@ -14,13 +14,16 @@ local function GetPowerPercent(unitName, resourceType)
         return nil
     end
     local curveType = CurveConstants.ZeroToOne
-    -- if startsAtZero then
-    --     local curveType = CurveConstants.ZeroToOne
-    -- else
-    --     local curveType = CurveConstants.Reverse
-    -- end
-    local perc1 = UnitPowerPercent(unitName, powerType, false, curveType)
-    return perc1
+    return UnitPowerPercent(unitName, powerType, false, curveType)
+end
+
+local function GetPowerPercentStepCurve(unitName, powerType, percentValue)
+    local colour = AptoUI.Utils.GetPowerColour(powerType)
+    local curvePower = C_CurveUtil.CreateColorCurve();
+    curvePower:SetType(Enum.LuaCurveType.Step);
+    curvePower:AddPoint(0, CreateColor(0.5, 0.5, 0.5, 0.25)); -- grey
+    curvePower:AddPoint(percentValue, CreateColor(colour.r, colour.g, colour.b, 1));  -- class colour
+    return UnitPowerPercent(unitName, powerType, false, curvePower)
 end
 
 -- Updates the mask based on power values
@@ -138,7 +141,7 @@ local function ResourceGetter(resourceType)
     return entry.func(unpack(entry.args))
 end
 
-local function UpdatePowerTextureUsingCount(iconNumber, unitName, textureItem, resourceType)
+local function UpdatePowerTextureUsingCount(iconNumber, unitName, textureItem, resourceType, iconMax)
     local powerType = GetResources(resourceType)
     local powerCount, _ = ResourceGetter(resourceType)
     -- mid grey
@@ -149,14 +152,19 @@ local function UpdatePowerTextureUsingCount(iconNumber, unitName, textureItem, r
     end
     -- if we get an error trying to get the power value (such as for a brief moment as combat starts)
     -- we want to just skip updating for a moment.
-    local noError, err = pcall(function()
+    -- local noError, err = pcall(function()
+    if powerType == Enum.PowerType.Maelstrom or powerType == Enum.PowerType.LunarPower then
+        colour = GetPowerPercentStepCurve("player", powerType, iconNumber / iconMax)
+        alpha = 1
+    else
         if type(powerCount) == "number" then
             if powerCount >= iconNumber then
                 colour = AptoUI.Utils.GetPowerColour(powerType)
                 alpha = 1
             end
         end
-    end)
+    end
+    -- end)
 
     textureItem:Show()
     textureItem:SetVertexColor(colour.r, colour.g, colour.b, alpha)
@@ -174,6 +182,10 @@ function AptoUI.HUD.ResourceIcons(parent, resourceType)
         frameLayer = 1
         texturePath = AptoUI.HUD.Textures.HexSmallFill
     end
+    local powerType = GetResources(resourceType)
+    if powerType == Enum.PowerType.Maelstrom or powerType == Enum.PowerType.LunarPower then
+        countMax = 10
+    end
     local frames = AptoUI.HUD.IconStrip(parent, countMax, 3, false, frameLayer, texturePath)
 
     -- link frames to event handlers
@@ -181,11 +193,11 @@ function AptoUI.HUD.ResourceIcons(parent, resourceType)
         local unitName = "player"
         local frame = frameData["frame"]
         local fill = frameData["fill"]
-        UpdatePowerTextureUsingCount(iconNumber, unitName, fill, resourceType)
+        UpdatePowerTextureUsingCount(iconNumber, unitName, fill, resourceType, countMax)
 
         frame:SetScript("OnEvent", function(_, event, eventUnit)
             if eventUnit == unitName or event == "RUNE_POWER_UPDATE" or event == "RUNE_TYPE_UPDATE" then
-                UpdatePowerTextureUsingCount(iconNumber, unitName, fill, resourceType)
+                UpdatePowerTextureUsingCount(iconNumber, unitName, fill, resourceType, countMax)
             end
             if event == "PLAYER_REGEN_DISABLED" then
                 frame:SetAlpha(AptoUI.HUD.HUDAlpha.Icon.Combat)
@@ -205,7 +217,7 @@ function AptoUI.HUD.ResourceIcons(parent, resourceType)
             frame:RegisterEvent(eventName)
         end
 
-        UpdatePowerTextureUsingCount(iconNumber, unitName, fill, resourceType)
+        UpdatePowerTextureUsingCount(iconNumber, unitName, fill, resourceType, countMax)
     end
     return frames
 end
