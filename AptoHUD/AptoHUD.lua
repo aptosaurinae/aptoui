@@ -64,23 +64,6 @@ local outOfCombatEvent = "PLAYER_REGEN_ENABLED"
 frame:RegisterEvent(combatEvent)
 frame:RegisterEvent(outOfCombatEvent)
 
-local playerFrameShowEventsUnit = {
-    "UNIT_HEALTH",
-    "UNIT_MAXHEALTH",
-    "UNIT_POWER_UPDATE",
-    "UNIT_MAXPOWER",
-}
-local playerFrameShowEvents = {
-    "PLAYER_ENTERING_WORLD",
-    "PLAYER_TARGET_CHANGED",
-    "PLAYER_UPDATE_RESTING",
-    "PLAYER_FLAGS_CHANGED",
-    "PLAYER_LEVEL_UP",
-    "PLAYER_XP_UPDATE",
-    "PLAYER_UPDATE_MAX_BATTLE_PET_LEVEL",
-    "PLAYER_UPDATE_RESTING",
-}
-
 local healthFrame = nil
 local powerFrame = nil
 local powerIcons = nil
@@ -88,23 +71,17 @@ local powerIcons = nil
 local playerLoggedIn = false
 
 frame:SetScript("OnEvent", function(self, event)
+    -- if event == combatEvent then
+    --     PlayerFrame:SetAlpha(0)
+    -- end
+    -- if event == outOfCombatEvent then
+    --     PlayerFrame:SetAlpha(1)
+    -- end
     if event == "PLAYER_LOGIN" then
         playerLoggedIn = true
+        PlayerFrame:SetAlpha(0)
     end
     if playerLoggedIn then
-        if event == combatEvent then
-            PlayerFrame:UnregisterAllEvents()
-            PlayerFrame:Hide()
-        end
-        if event == outOfCombatEvent then
-            for _, eventShow in ipairs(playerFrameShowEventsUnit) do
-                PlayerFrame:RegisterUnitEvent(eventShow)
-            end
-            for _, eventShow in ipairs(playerFrameShowEventsUnit) do
-                PlayerFrame:RegisterEvent(eventShow)
-            end
-            PlayerFrame:Show()
-        end
         if AptoUI.Utils.isUpdateEvent(hudHealthFrameRebuildEvents, event) then
             -- Health
             if healthFrame then
