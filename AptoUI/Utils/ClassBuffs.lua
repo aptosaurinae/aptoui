@@ -4,6 +4,7 @@ AptoUI.Utils.ClassBuffLookup = {
     mage = {},
     priest = {},
     rogue = {},
+    shaman = {},
     warrior = {},
 }
 AptoUI.Utils.ClassBuffLookup["druid"]["Mark of the Wild"] = {
@@ -22,6 +23,9 @@ AptoUI.Utils.ClassBuffLookup["rogue"]["Lethal Poison"] = {
     deadly = "Deadly Poison",
     instant = "Instant Poison",
     wound = "Wound Poison",
+}
+AptoUI.Utils.ClassBuffLookup["shaman"]["Skyfury"] = {
+    skyfury = "Skyfury"
 }
 AptoUI.Utils.ClassBuffLookup["rogue"]["Non-Lethal Poison"] = {
     atrophic = "Atrophic Poison",
@@ -53,11 +57,6 @@ function AptoUI.Utils.HasMissingClassBuff(class)
             activeBuffs[aura] = true
         end)
     end)
-
-    local debug = false
-    if not noError and debug then
-        print("AptoUI.Utils.HasMissingClassBuff: error checking if missing class buffs")
-    end
 
     local missingBuffTypes = {}
     for buffCategoryName, buffCategoryBuffNames in pairs(AptoUI.Utils.ClassBuffLookup[class]) do
