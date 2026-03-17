@@ -4,7 +4,7 @@ AptoUI.Utils.ClassBuffLookup = {
     mage = {},
     priest = {},
     rogue = {},
-    shaman = {}
+    shaman = {},
     warrior = {},
 }
 AptoUI.Utils.ClassBuffLookup["druid"]["Mark of the Wild"] = {
@@ -57,11 +57,6 @@ function AptoUI.Utils.HasMissingClassBuff(class)
             activeBuffs[aura] = true
         end)
     end)
-
-    local debug = false
-    if not noError and debug then
-        print("AptoUI.Utils.HasMissingClassBuff: error checking if missing class buffs")
-    end
 
     local missingBuffTypes = {}
     for buffCategoryName, buffCategoryBuffNames in pairs(AptoUI.Utils.ClassBuffLookup[class]) do
