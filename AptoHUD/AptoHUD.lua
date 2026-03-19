@@ -28,6 +28,18 @@ AptoUI.HUD.HUDAlpha = {
 }
 AptoUI.HUD.Textures = {
     HexBottomLeft = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-bl",
+    HexBottomLeftSegments = {
+        [1] = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-bl-1",
+        [2] = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-bl-2",
+        [3] = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-bl-3",
+        [4] = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-bl-4",
+        [5] = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-bl-5",
+        [6] = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-bl-6",
+        [7] = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-bl-7",
+        [8] = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-bl-8",
+        [9] = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-bl-9",
+        [10] = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-bl-10",
+    },
     HexBottomLeftBorder = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-bl-border",
     HexBottomRight = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-br",
     HexBottomRightBorder = "Interface\\AddOns\\AptoHUD\\Textures\\hex-ring-512-br-border",
