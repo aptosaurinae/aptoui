@@ -12,7 +12,11 @@ local function GetHealthColor(unitName, maxPercent)
     if maxPercent < 9 then
         curveHealth:AddPoint(max(0.6, maxPercent / 10), CreateColor(1, 1, 0, 0.6));  -- yellow
     end
-    curveHealth:AddPoint(0.9, CreateColor(0, 1, 0, 0.4));  -- green
+    if IsResting() then
+        curveHealth:AddPoint(0.9, CreateColor(0.8, 0.6, 1, 1))
+    else
+        curveHealth:AddPoint(0.9, CreateColor(0, 1, 0, 0.4));  -- green
+    end
     return UnitHealthPercent(unitName, false, curveHealth)
 end
 
@@ -71,5 +75,4 @@ function AptoUI.HUD.CreateHexSegmentPlayerHP(parent)
 
         UpdateHealthTextureUsingPercent(unitName, fill, maxPercent)
     end
-    return parentFrame
 end
