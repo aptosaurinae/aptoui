@@ -2,20 +2,29 @@
 local function GetHealthColor(unitName, maxPercent)
     local curveHealth = C_CurveUtil.CreateColorCurve();
     curveHealth:SetType(Enum.LuaCurveType.Step);
-    curveHealth:AddPoint(0, CreateColor(1, 1, 1, 0)); -- hidden
-    if maxPercent < 3 then
-        curveHealth:AddPoint(max(0, maxPercent / 10), CreateColor(1, 0, 0, 1)); -- red
-    end
-    if maxPercent < 6 then
-        curveHealth:AddPoint(max(0.3, maxPercent / 10), CreateColor(1, 0.6, 0, 0.8));  -- orange
-    end
-    if maxPercent < 9 then
-        curveHealth:AddPoint(max(0.6, maxPercent / 10), CreateColor(1, 1, 0, 0.6));  -- yellow
-    end
+    local restingColor = CreateColor(0.8, 0.6, 1, 1)
+    local redColor = CreateColor(1, 0, 0, 1)
+    local orangeColor = CreateColor(1, 0.6, 0, 0.8)
+    local yellowColor = CreateColor(1, 1, 0, 0.6)
+    local greenColor = CreateColor(0, 1, 0, 0.4)
+    local hiddenColor = CreateColor(0, 0, 0, 0)
+    curveHealth:AddPoint(0, hiddenColor)
     if IsResting() then
-        curveHealth:AddPoint(0.9, CreateColor(0.8, 0.6, 1, 1))
+        curveHealth:AddPoint(maxPercent / 10, restingColor)
+    elseif maxPercent < 3 then
+        curveHealth:AddPoint(maxPercent / 10, redColor)
+        curveHealth:AddPoint(0.3, orangeColor)
+        curveHealth:AddPoint(0.6, yellowColor)
+        curveHealth:AddPoint(0.9, greenColor)
+    elseif maxPercent < 6 then
+        curveHealth:AddPoint(maxPercent / 10, orangeColor)
+        curveHealth:AddPoint(0.6, yellowColor)
+        curveHealth:AddPoint(0.9, greenColor)
+    elseif maxPercent < 9 then
+        curveHealth:AddPoint(maxPercent / 10, yellowColor)
+        curveHealth:AddPoint(0.9, greenColor)
     else
-        curveHealth:AddPoint(0.9, CreateColor(0, 1, 0, 0.4));  -- green
+        curveHealth:AddPoint(maxPercent / 10, greenColor)
     end
     return UnitHealthPercent(unitName, false, curveHealth)
 end
