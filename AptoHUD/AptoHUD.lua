@@ -2,20 +2,30 @@
 AptoUI.HUD.PlayerHealthUpdateEvents = {
     "UNIT_HEALTH",
     "UNIT_MAXHEALTH",
-    "PLAYER_REGEN_DISABLED",
-    "PLAYER_REGEN_ENABLED",
     "PLAYER_TARGET_CHANGED",
     "UNIT_SPELLCAST_START",
     "UNIT_SPELLCAST_SUCCEEDED",
     "BAG_UPDATE_DELAYED",
     "PLAYER_UPDATE_RESTING"
 }
+AptoUI.HUD.CastingStartEvents = {
+    UNIT_SPELLCAST_START = true,
+    UNIT_SPELLCAST_CHANNEL_START = true,
+}
+AptoUI.HUD.CastingStopEvents = {
+    UNIT_SPELLCAST_INTERRUPTED = true,
+    UNIT_SPELLCAST_STOP = true,
+    UNIT_SPELLCAST_CHANNEL_STOP = true,
+    PLAYER_FOCUS_CHANGED = true,
+}
 AptoUI.HUD.PlayerPowerUpdateEvents = {
     "UNIT_POWER_UPDATE",
-    "PLAYER_REGEN_DISABLED",
-    "PLAYER_REGEN_ENABLED",
     "UNIT_MAXPOWER",
     "PLAYER_TARGET_CHANGED",
+}
+AptoUI.HUD.PlayerCombatEvents = {
+    "PLAYER_REGEN_DISABLED",
+    "PLAYER_REGEN_ENABLED",
 }
 AptoUI.HUD.HUDAlpha = {
     Main = {
@@ -56,6 +66,10 @@ AptoUI.HUD.Textures = {
 local hudHealthFrameRebuildEvents = {
     PLAYER_LOGIN = true,
 }
+local hudFocusCastingFrameRebuildEvents = {
+    PLAYER_LOGIN = true,
+    PLAYER_FOCUS_CHANGED = true,
+}
 local hudPowerFrameRebuildEvents = {
     PLAYER_LOGIN = true,
     UNIT_MAXPOWER = true,
@@ -73,24 +87,21 @@ end
 for eventName, _ in pairs(hudPowerFrameRebuildEvents) do
     frame:RegisterEvent(eventName)
 end
-local combatEvent = "PLAYER_REGEN_DISABLED"
-local outOfCombatEvent = "PLAYER_REGEN_ENABLED"
-frame:RegisterEvent(combatEvent)
-frame:RegisterEvent(outOfCombatEvent)
+for eventName, _ in pairs(hudFocusCastingFrameRebuildEvents) do
+    frame:RegisterEvent(eventName)
+end
+for _, eventName in ipairs(AptoUI.HUD.PlayerCombatEvents) do
+    frame:RegisterEvent(eventName)
+end
 
 local healthFrame = nil
 local powerFrame = nil
 local powerIcons = nil
+local focusCastingFrame = nil
 
 local playerLoggedIn = false
 
 frame:SetScript("OnEvent", function(self, event)
-    -- if event == combatEvent then
-    --     PlayerFrame:SetAlpha(0)
-    -- end
-    -- if event == outOfCombatEvent then
-    --     PlayerFrame:SetAlpha(1)
-    -- end
     if event == "PLAYER_LOGIN" then
         playerLoggedIn = true
         PlayerFrame:SetAlpha(0)
@@ -103,6 +114,14 @@ frame:SetScript("OnEvent", function(self, event)
             end
             healthFrame = AptoUI.Utils.CreateHUDFrame("healthFrame")
             AptoUI.HUD.CreateHexSegmentPlayerHP(healthFrame)
+        end
+        if AptoUI.Utils.isUpdateEvent(hudFocusCastingFrameRebuildEvents, event) then
+            -- Focus target casting
+            if focusCastingFrame then
+                AptoUI.Utils.DestroyHUDFrame(focusCastingFrame)
+            end
+            focusCastingFrame = AptoUI.Utils.CreateHUDFrame("focusCastingFrame")
+            AptoUI.HUD.CreateHexSegmentCasting(focusCastingFrame, "focus")
         end
         if AptoUI.Utils.isUpdateEvent(hudPowerFrameRebuildEvents, event) then
             if powerFrame then
