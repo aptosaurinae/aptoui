@@ -64,7 +64,6 @@ function AptoUI.HUD.CreateHexSegmentPlayerHP(parent)
         fill:AddMaskTexture(mask)
 
         local unitName = "player"
-        UpdateHealthTextureUsingPercent(unitName, fill, maxPercent)
 
         frame:SetScript("OnEvent", function(_, event, eventUnit)
             if eventUnit == unitName then

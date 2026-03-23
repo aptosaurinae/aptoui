@@ -27,7 +27,9 @@ local function UpdateCastingTexture(unitName, textureFrame, channelBool)
             StopUpdating(self)
             return
         end
-        self.fill:SetVertexColor(1, 1, 1, 1)
+        local elapsed = GetTime() - (self.castStartTime or GetTime())
+        local pulse = abs(sin(elapsed * 200 - math.pi/2))
+        self.fill:SetVertexColor(1, pulse, pulse, 1)
     end)
 end
 
@@ -62,6 +64,7 @@ function AptoUI.HUD.CreateHexSegmentCasting(parent, unitName)
             if event == UNIT_SPELLCAST_CHANNEL_START then
                 channelBool = true
             end
+            frame.castStartTime = GetTime()
             UpdateCastingTexture(unitName, frame, channelBool)
             return
         end
@@ -69,16 +72,6 @@ function AptoUI.HUD.CreateHexSegmentCasting(parent, unitName)
             if eventUnit == nil or eventUnit == unitName then
                 StopUpdating(frame)
                 return
-            end
-        end
-
-        if eventUnit == unitName then
-            if event == "UNIT_SPELLCAST_INTERRUPTIBLE" then
-                print(1)
-                frame.fill:SetColorTexture(0, 1, 0, 1)
-            elseif event == "UNIT_SPELLCAST_NOT_INTERRUPTIBLE" then
-                print(2)
-                frame.fill:SetColorTexture(1, 0, 0, 1)
             end
         end
 
@@ -98,7 +91,4 @@ function AptoUI.HUD.CreateHexSegmentCasting(parent, unitName)
     for _, eventName in ipairs(AptoUI.HUD.PlayerCombatEvents) do
         frame:RegisterEvent(eventName)
     end
-    frame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTIBLE")
-    frame:RegisterEvent("UNIT_SPELLCAST_NOT_INTERRUPTIBLE")
-
 end
