@@ -64,7 +64,6 @@ function AptoUI.HUD.CreateHexSegmentPlayerHP(parent)
         fill:AddMaskTexture(mask)
 
         local unitName = "player"
-        UpdateHealthTextureUsingPercent(unitName, fill, maxPercent)
 
         frame:SetScript("OnEvent", function(_, event, eventUnit)
             if eventUnit == unitName then
@@ -77,8 +76,10 @@ function AptoUI.HUD.CreateHexSegmentPlayerHP(parent)
             end
         end)
 
-        local regEvents = AptoUI.HUD.PlayerHealthUpdateEvents
-        for _, eventName in ipairs(regEvents) do
+        for _, eventName in ipairs(AptoUI.HUD.PlayerHealthUpdateEvents) do
+            frame:RegisterEvent(eventName)
+        end
+        for _, eventName in ipairs(AptoUI.HUD.PlayerCombatEvents) do
             frame:RegisterEvent(eventName)
         end
 

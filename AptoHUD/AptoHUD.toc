@@ -13,4 +13,5 @@ Hud/Icons.lua
 Hud/Borders.lua
 Hud/Health.lua
 Hud/Power.lua
+Hud/TargetCasting.lua
 AptoHUD.lua

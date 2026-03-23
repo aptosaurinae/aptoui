@@ -63,7 +63,6 @@ function AptoUI.HUD.CreateHexSegmentPlayerPower(parent, resourceType, texturePat
     fill:AddMaskTexture(mask)
 
     local unitName = "player"
-    UpdatePowerTextureUsingPercent(unitName, fill, resourceType)
 
     frame:SetScript("OnEvent", function(_, event, eventUnit)
         if eventUnit == unitName then
@@ -80,6 +79,9 @@ function AptoUI.HUD.CreateHexSegmentPlayerPower(parent, resourceType, texturePat
 
     local regEvents = AptoUI.HUD.PlayerPowerUpdateEvents
     for _, eventName in ipairs(regEvents) do
+        frame:RegisterEvent(eventName)
+    end
+    for _, eventName in ipairs(AptoUI.HUD.PlayerCombatEvents) do
         frame:RegisterEvent(eventName)
     end
 
@@ -193,7 +195,6 @@ function AptoUI.HUD.ResourceIcons(parent, resourceType)
         local unitName = "player"
         local frame = frameData["frame"]
         local fill = frameData["fill"]
-        UpdatePowerTextureUsingCount(iconNumber, unitName, fill, resourceType, countMax)
 
         frame:SetScript("OnEvent", function(_, event, eventUnit)
             if eventUnit == unitName or event == "RUNE_POWER_UPDATE" or event == "RUNE_TYPE_UPDATE" then
@@ -214,6 +215,9 @@ function AptoUI.HUD.ResourceIcons(parent, resourceType)
             frame:RegisterEvent(eventName)
         end
         for _, eventName in ipairs(specificEvents) do
+            frame:RegisterEvent(eventName)
+        end
+        for _, eventName in ipairs(AptoUI.HUD.PlayerCombatEvents) do
             frame:RegisterEvent(eventName)
         end
 
