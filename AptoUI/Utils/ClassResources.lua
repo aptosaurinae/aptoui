@@ -83,6 +83,8 @@ local PowerLookup = {
         [1480] = power_dh
     },
     druid = {  -- note that these are for "no form" druid, see PowerLookupDruidForm for form values
+        -- no spec (forever)
+        [1484] = power_mana,
         -- balance
         [102] = { primary = Enum.PowerType.Mana, secondary = Enum.PowerType.LunarPower },
         -- feral
@@ -101,6 +103,8 @@ local PowerLookup = {
         [1468] = power_evoker
     },
     hunter = {
+        -- no spec (forever)
+        [1485] = power_mana,
         -- Beast Master
         [253] = power_hunter,
         -- Marksmanship
@@ -109,6 +113,8 @@ local PowerLookup = {
         [255] = power_hunter
     },
     mage = {
+        -- no spec (forever)
+        [1482] = power_mana,
         -- Arcane
         [62] = { primary = Enum.PowerType.Mana, secondary = Enum.PowerType.ArcaneCharges },
         -- Fire
@@ -125,6 +131,8 @@ local PowerLookup = {
         [269] = { primary = Enum.PowerType.Energy, secondary = Enum.PowerType.Chi }
     },
     paladin = {
+        -- no spec (forever)
+        [1486] = power_mana,
         -- Holy
         [65] = power_paladin,
         -- Protection
@@ -133,6 +141,8 @@ local PowerLookup = {
         [70] = power_paladin
     },
     priest = {
+        -- no spec (forever)
+        [1487] = power_mana,
         -- Discipline
         [256] = power_priest,
         -- Holy
@@ -141,6 +151,8 @@ local PowerLookup = {
         [258] = { primary = Enum.PowerType.Mana, secondary = Enum.PowerType.Insanity }
     },
     rogue = {
+        -- no spec (forever)
+        [1488] = power_energy,
         -- Assassination
         [259] = power_rogue,
         -- Outlaw
@@ -149,6 +161,8 @@ local PowerLookup = {
         [261] = power_rogue
     },
     shaman = {
+        -- no spec (forever)
+        [1489] = power_mana,
         -- Elemental
         [262] = { primary = Enum.PowerType.Mana, secondary = Enum.PowerType.Maelstrom },
         -- Enhancement
@@ -157,6 +171,8 @@ local PowerLookup = {
         [264] = power_shaman
     },
     warlock = {
+        -- no spec (forever)
+        [1490] = power_mana,
         -- Affliction
         [265] = power_warlock,
         -- Demonology
@@ -165,6 +181,8 @@ local PowerLookup = {
         [267] = power_warlock
     },
     warrior = {
+        -- no spec (forever)
+        [1491] = power_rage,
         -- Arms
         [71] = power_warrior,
         -- Fury
