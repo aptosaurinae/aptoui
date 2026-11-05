@@ -8,6 +8,7 @@ end
 function AptoUI.Utils.GetPlayerSpec()
     local spec = C_SpecializationInfo.GetSpecialization()
     local specID = C_SpecializationInfo.GetSpecializationInfo(spec)
+    -- print("spec: ", spec, "specID:", specID)
     return specID
 end
 
